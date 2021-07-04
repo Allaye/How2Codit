@@ -3,3 +3,8 @@
 
 # databases 
 *.sqlite3
+
+# migration files
+migration
+# python cache files
+__pycache__
