@@ -12,5 +12,5 @@ def sleepy(duration):
 @shared_task()
 def send_email():
     sleep(10)
-    send_mail('Celery email task','This is proof that the email word', 'ekonlinehub@gmail.com', ['ekonlinehub@gmail.com'])
+    send_mail('Celery email task','This is proof that the email word', '*******@gmail.com', ['*****@gmail.com'])
     return None
