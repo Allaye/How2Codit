@@ -9,7 +9,8 @@ from progress.models import User
 def index(request):
     if request.method == "POST":
         form = UserForm(request.POST)
-        
+        if form.is_valid():
+            name = form.cleaned_data['name']
             
     form = UserForm()
     return render(request, 'index.html', {'form': form})
