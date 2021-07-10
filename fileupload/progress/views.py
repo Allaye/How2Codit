@@ -11,6 +11,7 @@ def index(request):
         form = UserForm(request.POST)
         if form.is_valid():
             name = form.cleaned_data['name']
+            email = form.cleaned_data['email']
             
     form = UserForm()
     return render(request, 'index.html', {'form': form})
