@@ -20,6 +20,20 @@
           {% endif %}
         </li>
     </ul>
+
+    {% if user.is_authenticated %}
+        <div class="jumbontron">
+            <h1>You are already registered</h1>
+        </div>
+    {% elif form %}
+        <form action="" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="container">
+                    {{ form.as_p }}
+                    <input type="submit" value="Login">
+            </div>
+        </form>
+    {% endif %}
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 </body>
 </html>

@@ -22,7 +22,17 @@ def index(request):
 
 
 def signin(request):
-    return render(request, 'login.html')
+    form = UserLogin(request.POST)
+    if form.is_valid():
+        username = form.cleaned_data.get('username')
+        password = form.cleaned_data.get('password')
+        user = authenticate(username=username, password=password)
+        if user:
+            login(request, user)
+            return redirect('index')
+        else:
+            return redirect('signin')
+    return render(request, 'login.html', {'form': form})
 
 @login_required()
 def logout(request):
