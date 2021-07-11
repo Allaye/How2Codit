@@ -17,7 +17,7 @@ def index(request):
     return render(request, 'index.html', {'form': form})
 
 
-def login(request):
+def signin(request):
     pass
 
 def profile(request):
