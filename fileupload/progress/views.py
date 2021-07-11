@@ -35,7 +35,7 @@ def signin(request):
     return render(request, 'login.html', {'form': form})
 
 @login_required()
-def logout(request):
+def signout(request):
     logout(request)
     return redirect('index')
 
