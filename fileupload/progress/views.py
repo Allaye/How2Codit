@@ -17,11 +17,11 @@ def index(request):
     return render(request, 'index.html', {'form': form})
 
 
-def login():
+def login(request):
     pass
 
-def profile():
+def profile(request):
     pass
 
-def registration():
+def registration(request):
     pass
