@@ -9,15 +9,16 @@ from progress.models import UserProfile
 
 # Create your views here.
 def index(request):
-    if request.method == "POST":
-        form = UserForm(request.POST)
-        if form.is_valid():
-            user = form.save()
-            user.set_password(user.password)
-            user.save()
-            return redirect('profile')
-    userform = UserForm()
-    return render(request, 'index.html', {'form': userform})
+    # if request.method == "POST":
+    #     form = UserForm(request.POST)
+    #     if form.is_valid():
+    #         user = form.save()
+    #         user.set_password(user.password)
+    #         user.save()
+    #         return redirect('profile')
+    # userform = UserForm()
+    user = request.user
+    return render(request, 'index.html', {'form': user})
 
 
 def signin(request):
