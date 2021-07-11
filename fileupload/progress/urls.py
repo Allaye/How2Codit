@@ -3,6 +3,5 @@ from progress import views
 
 urlpatterns = [
     path('/', views.index, name='index'),
-    path('signin/', views.index, name='signin'),
-
+    path('signin/', views.signin, name='signin')
 ]

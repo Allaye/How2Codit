@@ -18,10 +18,10 @@ def index(request):
 
 
 def signin(request):
-    pass
+    return render(request, 'login.html')
 
 def profile(request):
-    pass
+    return render(request, 'profile.html')
 
 def registration(request):
-    pass
+    return render(request, 'register.html')
