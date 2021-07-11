@@ -1,7 +1,7 @@
 from time import sleep
 from django.shortcuts import render
 from progress.forms import UserForm
-from progress.models import User
+from progress.models import UserProfile
 
 
 
@@ -12,6 +12,6 @@ def index(request):
         if form.is_valid():
             name = form.cleaned_data['name']
             email = form.cleaned_data['email']
-            
+            return render(request, 'index.html')
     form = UserForm()
     return render(request, 'index.html', {'form': form})
