@@ -10,11 +10,12 @@ def index(request):
     if request.method == "POST":
         form = UserForm(request.POST)
         if form.is_valid():
-            name = form.cleaned_data['name']
-            email = form.cleaned_data['email']
-            return render(request, 'index.html')
-    form = UserForm()
-    return render(request, 'index.html', {'form': form})
+            user = form.save()
+            user.set_password(user.password)
+            user.save()
+            return redirect('profile')
+    userform = UserForm()
+    return render(request, 'index.html', {'form': userform})
 
 
 def signin(request):
