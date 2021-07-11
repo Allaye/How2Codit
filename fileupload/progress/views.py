@@ -1,5 +1,5 @@
 from time import sleep
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 from progress.forms import UserForm
 from progress.models import UserProfile
 
@@ -19,6 +19,9 @@ def index(request):
 
 def signin(request):
     return render(request, 'login.html')
+
+def logout(request):
+    return redirect(index)
 
 def profile(request):
     return render(request, 'profile.html')
