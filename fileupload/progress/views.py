@@ -15,3 +15,13 @@ def index(request):
             return render(request, 'index.html')
     form = UserForm()
     return render(request, 'index.html', {'form': form})
+
+
+def login():
+    pass
+
+def profile():
+    pass
+
+def registration():
+    pass
