@@ -18,7 +18,11 @@ class UserForm(forms.ModelForm):
         fields = ('username', 'email', 'password')
 
 
-class UserImageUpdate(forms.ModelForm):
+class UserDetailsUpdate(forms.ModelForm):
     class Meta:
         model = UserProfile
         fields = ('image', 'website')
+
+class UserLogin(forms.Form):
+    username = forms.CharField()
+    password = forms.CharField(widget=forms.PasswordInput())

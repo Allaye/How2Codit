@@ -8,6 +8,32 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 </head>
 <body>
+    <ul class="nav nav-pills nav-fill">
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="{% url 'index' %}">Home</a>
+          {% if user.is_authenticated %}
+          <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+          <a class="nav-link" href="{% url 'profile' %}">Profile</a>
+          {% else %}
+          <a class="nav-link" href="{% url 'signin' %}">Login</a>
+          <a class="nav-link" href="{% url 'register' %}">Register</a>
+          {% endif %}
+        </li>
+    </ul>
+
+    {% if user.is_authenticated %}
+        <div class="jumbontron">
+            <h1>You are already registered</h1>
+        </div>
+    {% elif form %}
+        <form action="" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="container">
+                    {{ form.as_p }}
+                    <input type="submit" value="Submit">
+            </div>
+        </form>
+    {% endif %}
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 </body>
 </html>
