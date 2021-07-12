@@ -21,7 +21,7 @@ class UserForm(forms.ModelForm):
 class UserDetailsUpdate(forms.ModelForm):
     class Meta:
         model = UserProfile
-        fields = ('image', 'website')
+        fields = ('image', 'website', 'sex')
 
 class UserLogin(forms.Form):
     username = forms.CharField()
