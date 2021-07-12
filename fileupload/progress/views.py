@@ -42,13 +42,14 @@ def signout(request):
 
 @login_required()
 def profile(request):
+    print(request.user)
     if request.method == 'POST':
-        user = UserProfile.objects.get(user=request.user)
-        form = UserDetailsUpdate(request.POST, instance=user)
+        # current_user = UserProfile.objects.get(username=request.user)
+        form = UserDetailsUpdate(request.POST, instance=request.user.userprofile)
         if form.is_valid():
-            form.save()
+            form.save(commit=True)
             return redirect('profile')
-    form = UserDetailsUpdate()
+    form = UserDetailsUpdate(instance=request.user)
     return render(request, 'profile.html', {'form': form})
 
 
