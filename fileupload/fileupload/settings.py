@@ -135,6 +135,7 @@ STATICFILES_DIRS = [STATIC_DIR]
 
 # media file (uploaded images, uploaded vides etc)
 
+LOGIN_URL = '/fileupload/signin'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = MEDIA_DIR
