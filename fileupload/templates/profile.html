@@ -21,11 +21,7 @@
         </li>
     </ul>
 
-    {% if user.is_authenticated %}
-        <div class="jumbontron">
-            <h1>You are already registered</h1>
-        </div>
-    {% elif form %}
+    {% if form %}
         <form action="" method="post" enctype="multipart/form-data">
             {% csrf_token %}
             <div class="container">
