@@ -1,16 +1,11 @@
 from django import forms
-from django import forms
 from django.contrib.auth.models import User
-from django import forms
-from django.contrib.auth.models import User
-from django import forms
-from progress.models import UserProfile
+from progress.models import Profile
 
 
 
 class UserForm(forms.ModelForm):
     password = forms.CharField(widget=forms.PasswordInput())
-    
     sex = forms.CharField()
 
     class Meta:
@@ -20,7 +15,7 @@ class UserForm(forms.ModelForm):
 
 class UserDetailsUpdate(forms.ModelForm):
     class Meta:
-        model = UserProfile
+        model = Profile
         fields = ('image', 'website', 'sex')
 
 class UserLogin(forms.Form):
