@@ -3,7 +3,7 @@ from django.shortcuts import redirect, render
 from django.contrib.auth.decorators import login_required 
 from django.contrib.auth import authenticate, get_user_model, login, logout
 from progress.forms import UserForm, UserDetailsUpdate, UserLogin
-from progress.models import UserProfile
+from progress.models import Profile
 
 
 
@@ -45,7 +45,7 @@ def profile(request):
     print(request.user)
     if request.method == 'POST':
         # current_user = UserProfile.objects.get(username=request.user)
-        form = UserDetailsUpdate(request.POST, instance=request.user.userprofile)
+        form = UserDetailsUpdate(request.POST, instance=request.user.user_profile)
         if form.is_valid():
             form.save(commit=True)
             return redirect('profile')
@@ -58,10 +58,11 @@ def registration(request):
     if request.method == "POST":
         form = UserForm(request.POST)
         if form.is_valid():
-            user = form.save()
-            user.set_password(user.password)
+            user = form.save(commit=False)
+            password = form.cleaned_data.get('password')
+            user.set_password(password)
             user.save()
-            return redirect('login')
+            return redirect('signin')
     userform = UserForm()
     return render(request, 'register.html', {'form': userform})
 
