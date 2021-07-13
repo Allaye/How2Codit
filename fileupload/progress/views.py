@@ -4,6 +4,18 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, get_user_model, login, logout
 from progress.forms import UserForm, UserDetailsUpdate, UserLogin
 from progress.models import Profile
+from progress.tasks import go_to_sleep
+
+
+
+def progress(request):
+    go_to_sleep.delay(10)
+    return render(request, 'progress.html')
+
+
+
+
+
 
 
 
