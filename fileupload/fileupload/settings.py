@@ -49,7 +49,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'progress'
+    'progress',
+    'django_celery_results'
 ]
 
 MIDDLEWARE = [
@@ -147,6 +148,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # celery application settings
 
-CELERY_BROKER_URL = ''
+CELERY_BROKER_URL = os.environ.get('REDIS_TLS')
 CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_BACKEND = 'django-db'
