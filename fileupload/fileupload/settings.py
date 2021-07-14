@@ -52,7 +52,7 @@ INSTALLED_APPS = [
     'progress',
     'django_celery_results',
     'celery_progress',
-    'celery'
+    'celery',
 ]
 
 MIDDLEWARE = [
@@ -149,8 +149,13 @@ MEDIA_ROOT = MEDIA_DIR
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # celery application settings
-
+# FILE_UPLOAD_MAX_MEMORY_SIZE = 125000
 CELERY_BROKER_URL = os.environ.get('REDIS_TLS')
-CELERY_ACCEPT_CONTENT = ['json']
-CELERY_TASK_SERIALIZER = 'json'
+CELERY_ACCEPT_CONTENT = ['pickle', 'application/json']
+CELERY_TASK_SERIALIZER = 'pickle'
+
 CELERY_RESULT_BACKEND = 'django-db'
+FILE_UPLOAD_HANDLERS = [
+    'django.core.files.uploadhandler.MemoryFileUploadHandler',
+    'django.core.files.uploadhandler.TemporaryFileUploadHandler',
+]
