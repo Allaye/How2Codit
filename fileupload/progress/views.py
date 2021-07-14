@@ -4,18 +4,41 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, get_user_model, login, logout
 from progress.forms import UserForm, UserDetailsUpdate, UserLogin
 from progress.models import Profile
-from progress.tasks import go_to_sleep
+from progress.tasks import process_download
+from django.conf import settings
+from django.core.files.storage import FileSystemStorage
 
 
+# def progress(request):
+#     if request.method == 'POST':
+#         download_task = process_download.delay()
+#         task_id = download_task.task_id
+#         print(f'Task ID is {task_id}')
+#         return render(request, 'progress.html', {'task_id': task_id})
+#     else:
 
-def progress(request):
-    go_to_sleep.delay(10)
-    return render(request, 'progress.html')
+#         return render(request, 'progress.html', {})
 
+# def simple_upload(request):
+#     if request.method == 'POST' and request.FILES['image']:
+#         image = request.FILES['image']
+#         fs = FileSystemStorage()
+#         filename = fs.save(image.name, image)
+#         uploaded_file_url = fs.url(filename)
+#         return render(request, 'upload.html', {'uploaded_file_url': uploaded_file_url})
+#     return render(request, 'upload.html',)
 
-
-
-
+def simple_upload(request):
+    if request.method == 'POST' and request.FILES['image']:
+        file = request.FILES['image']
+        print(file.chunks())
+        for chunk in file.chunks():
+            print(chunk)
+        #print(image.size)
+        #task = process_download.delay(image)
+        #print(task.task_id)
+        return redirect('index')
+    return render(request, 'upload.html')
 
 
 
