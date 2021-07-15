@@ -1,3 +1,4 @@
+import io
 from time import sleep
 from django.shortcuts import redirect, render
 from django.contrib.auth.decorators import login_required 
@@ -7,7 +8,8 @@ from progress.models import Profile
 from progress.tasks import process_download
 from django.conf import settings
 from django.core.files.storage import FileSystemStorage
-
+from django.core.files.images import ImageFile
+import pickle
 
 # def progress(request):
 #     if request.method == 'POST':
@@ -27,15 +29,12 @@ from django.core.files.storage import FileSystemStorage
 #         uploaded_file_url = fs.url(filename)
 #         return render(request, 'upload.html', {'uploaded_file_url': uploaded_file_url})
 #     return render(request, 'upload.html',)
-
+import sys
 def simple_upload(request):
     if request.method == 'POST' and request.FILES['image']:
         file = request.FILES['image']
-        print(file.chunks())
-        for chunk in file.chunks():
-            print(chunk)
-        #print(image.size)
-        #task = process_download.delay(image)
+        process_download(file)
+        #task = process_download.delay(file)
         #print(task.task_id)
         return redirect('index')
     return render(request, 'upload.html')
@@ -118,3 +117,21 @@ def registration(request):
 #     if request.method == 'POST':
 #         user_profile = UserProfile.objects.get(user=request.user)
 #         form = UserProfileForm(request.POST, instance=user_profile)
+
+
+
+
+        #file_size = file.size
+        # fs = FileSystemStorage()
+        # buffer = io.BytesIO()    
+        # chunk_size = 0
+        # for chunk in file.chunks():
+        #     chunk_size += sys.getsizeof(chunk)
+        #     buffer.write(chunk)
+        # print(f'chunks sizes is {chunk_size} and file size is {file_size}')
+        # buffer.seek(0)
+        # image = ImageFile(buffer, name=file.name)
+        # fs.save(file.name, content=image)
+        #print(image.size)
+        #task = process_download.delay(image)
+        #print(task.task_id)
