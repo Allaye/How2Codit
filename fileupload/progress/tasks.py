@@ -1,8 +1,11 @@
+import io
+import sys
 import time
 from celery import shared_task
 from celery_progress.backend import ProgressRecorder
 from django.core.files.storage import FileSystemStorage
 from django.http import HttpResponse
+from django.core.files.images import ImageFile
 
 
 # @shared_task(bind=True)
@@ -18,20 +21,33 @@ from django.http import HttpResponse
 
 @shared_task(bind=True)
 def process_download(self, image_file):
+    process_recoder = ProgressRecorder(self)
     print('Upload: Task Started')
     time.sleep(50)
-    # fs = FileSystemStorage()
-    # filename = fs.save(image_file.name, image_file)
-    # uploaded_file_url = fs.url(filename)
+    fs = FileSystemStorage()
+    buffer = io.BytesIO()
+    chunk_size = 0
+    for chunk in image_file.chunks():
+        chunk_size += sys.getsizeof(chunk)
+        buffer.write(chunk)
+        process_recoder.set_progress(chunk_size, image_file.size)
+    buffer.seek(0)
+    image = ImageFile(buffer, name=image_file.name)
+    fs.save(image_file.name, image)
     return 'Done'
 
-    # return  uploaded_file_url
-
-# def update_progress(self, proc):
-
-#     process_recorder  = ProgressRecorder(self)
-    
-
+# file = request.FILES['image']
+#         file_size = file.size
+#         fs = FileSystemStorage()
+#         buffer = io.BytesIO()
+#         chunk_size = 0
+#         for chunk in file.chunks():
+#             chunk_size += sys.getsizeof(chunk)
+#             buffer.write(chunk)
+#         print(f'chunks sizes is {chunk_size} and file size is {file_size}')
+#         buffer.seek(0)
+#         image = ImageFile(buffer, name=file.name)
+#         fs.save(file.name, content=image)
 
 
 
