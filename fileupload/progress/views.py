@@ -33,10 +33,11 @@ import sys
 def simple_upload(request):
     if request.method == 'POST' and request.FILES['image']:
         file = request.FILES['image']
-        process_download(file)
-        #task = process_download.delay(file)
-        #print(task.task_id)
-        return redirect('index')
+        print(sys.getsizeof(file.chunks()))
+        # process_download(file)
+        task = process_download.delay(file)
+        print(task.task_id)
+        return render(request, 'index.html', {'task_id': task.task_id})
     return render(request, 'upload.html')
 
 
