@@ -23,14 +23,15 @@ from django.core.files.images import ImageFile
 def process_download(self, image_file):
     process_recoder = ProgressRecorder(self)
     print('Upload: Task Started')
-    time.sleep(50)
+    # time.sleep(50)
     fs = FileSystemStorage()
     buffer = io.BytesIO()
+    image_size = sys.getsizeof(image_file)
     chunk_size = 0
     for chunk in image_file.chunks():
         chunk_size += sys.getsizeof(chunk)
         buffer.write(chunk)
-        process_recoder.set_progress(chunk_size, image_file.size)
+        process_recoder.set_progress(chunk_size, image_size, description=f'uploaded {chunk_size} bytes of the file')
     buffer.seek(0)
     image = ImageFile(buffer, name=image_file.name)
     fs.save(image_file.name, image)
