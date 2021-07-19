@@ -35,12 +35,20 @@ def simple_upload(request):
         file = request.FILES['image']
         print(sys.getsizeof(file.chunks()))
         # process_download(file)
-        task = process_download.delay(file)
-        print(task.task_id)
-        return render(request, 'index.html', {'task_id': task.task_id})
+        #task = process_download.delay(file)
+        #print(task.task_id)
+        #return render(request, 'index.html', {'task_id': task.task_id})
+        chunk_size = 0
+        for chunk in file.chunks():
+            chunk_size += sys.getsizeof(chunk)
+            print(chunk)
+        return redirect('index')
     return render(request, 'upload.html')
 
-
+# def home(request):
+#     task = ccount.delay()
+#     print(task.task_id)
+#     return redirect('index')
 
 # Create your views here.
 def index(request):
