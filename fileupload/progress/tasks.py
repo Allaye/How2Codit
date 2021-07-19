@@ -61,3 +61,12 @@ def process_download(self, image_file):
 #         filename = fs.save(image.name, image)
 #         uploaded_file_url = fs.url(filename)
 #         return uploaded_file_url
+
+
+# @shared_task(bind=True)
+# def ccount(self):
+#     progess = ProgressRecorder(self)
+#     for i in range(30):
+#         time.sleep(i)
+#         progess.set_progress(i+1, 10, description='testing')
+#     return 'Job done'
