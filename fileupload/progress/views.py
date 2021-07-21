@@ -5,50 +5,24 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, get_user_model, login, logout
 from progress.forms import UserForm, UserDetailsUpdate, UserLogin
 from progress.models import Profile
-from progress.tasks import process_download
+from progress.tasks import process_download, read_chunk
 from django.conf import settings
 from django.core.files.storage import FileSystemStorage
 from django.core.files.images import ImageFile
 import pickle
 
-# def progress(request):
-#     if request.method == 'POST':
-#         download_task = process_download.delay()
-#         task_id = download_task.task_id
-#         print(f'Task ID is {task_id}')
-#         return render(request, 'progress.html', {'task_id': task_id})
-#     else:
 
-#         return render(request, 'progress.html', {})
-
-# def simple_upload(request):
-#     if request.method == 'POST' and request.FILES['image']:
-#         image = request.FILES['image']
-#         fs = FileSystemStorage()
-#         filename = fs.save(image.name, image)
-#         uploaded_file_url = fs.url(filename)
-#         return render(request, 'upload.html', {'uploaded_file_url': uploaded_file_url})
-#     return render(request, 'upload.html',)
 import sys
 def simple_upload(request):
     if request.method == 'POST' and request.FILES['image']:
         file = request.FILES['image']
-        print(sys.getsizeof(file.chunks()))
-        # process_download(file)
-        #task = process_download.delay(file)
-        #print(task.task_id)
-        #return render(request, 'index.html', {'task_id': task.task_id})
-        chunk_size = 0
-        for chunk in file.chunks():
-            chunk_size += sys.getsizeof(chunk)
-            print(chunk)
-        return redirect('index')
+        
+        task = process_download.delay(file)
+        print(task.task_id)
+        return render(request, 'index.html', {'task_id': task.task_id})
     return render(request, 'upload.html')
 
-# def home(request):
-#     task = ccount.delay()
-#     print(task.task_id)
-#     return redirect('index')
+
 
 # Create your views here.
 def index(request):

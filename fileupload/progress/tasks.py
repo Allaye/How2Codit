@@ -18,38 +18,29 @@ from django.core.files.images import ImageFile
 #         progress_recoder.set_progress(i + 1, 5, description='downloading')
 #     print('End')
 #     return 'done sleeping'
+def read_chunk(file_object, chunk_size=125):
+    while True:
+        file =  file_object.read(chunk_size)
+        if not file:
+            break
+        yield file
 
 @shared_task(bind=True)
 def process_download(self, image_file):
     process_recoder = ProgressRecorder(self)
     print('Upload: Task Started')
-    # time.sleep(50)
     fs = FileSystemStorage()
     buffer = io.BytesIO()
-    image_size = sys.getsizeof(image_file)
     chunk_size = 0
-    for chunk in image_file.chunks():
-        chunk_size += sys.getsizeof(chunk)
+    for chunk in image_file.chunks():  
+        chunk_size += len(chunk)      
         buffer.write(chunk)
-        process_recoder.set_progress(chunk_size, image_size, description=f'uploaded {chunk_size} bytes of the file')
+        # length = len(list(image_file.chunks()))
+        process_recoder.set_progress(chunk_size, image_file.size, description=f'uploaded {chunk_size} bytes of the file')
     buffer.seek(0)
     image = ImageFile(buffer, name=image_file.name)
-    fs.save(image_file.name, image)
+    fs.save(image_file.name, content=image)
     return 'Done'
-
-# file = request.FILES['image']
-#         file_size = file.size
-#         fs = FileSystemStorage()
-#         buffer = io.BytesIO()
-#         chunk_size = 0
-#         for chunk in file.chunks():
-#             chunk_size += sys.getsizeof(chunk)
-#             buffer.write(chunk)
-#         print(f'chunks sizes is {chunk_size} and file size is {file_size}')
-#         buffer.seek(0)
-#         image = ImageFile(buffer, name=file.name)
-#         fs.save(file.name, content=image)
-
 
 
 
