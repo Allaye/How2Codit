@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, get_user_model, login, logout
 from progress.forms import UserForm, UserDetailsUpdate, UserLogin
 from progress.models import Profile
-from progress.tasks import process_download, read_chunk
+from progress.tasks import process_download, read_chunk, process_download_with_progress
 from django.conf import settings
 from django.core.files.storage import FileSystemStorage
 from django.core.files.images import ImageFile
@@ -17,7 +17,8 @@ def simple_upload(request):
     if request.method == 'POST' and request.FILES['image']:
         file = request.FILES['image']
         
-        task = process_download.delay(file)
+        # task = process_download.delay(file)
+        task = process_download_with_progress.delay(file)
         print(task.task_id)
         return render(request, 'index.html', {'task_id': task.task_id})
     return render(request, 'upload.html')
