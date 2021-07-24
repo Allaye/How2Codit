@@ -96,6 +96,16 @@ DATABASES = {
     }
 }
 
+# CACHES = {
+#     "default": {
+#         "BACKEND": "django_redis.cache.RedisCache",
+#         "LOCATION": "redis://127.0.0.1:6379/1",
+#         "OPTIONS": {
+#             "CLIENT_CLASS": "django_redis.client.DefaultClient",
+#         }
+#     }
+# }
+
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
@@ -151,11 +161,14 @@ FILE_UPLOAD_MAX_MEMORY_SIZE = 50*1024*1024
 
 # celery application settings
 # FILE_UPLOAD_MAX_MEMORY_SIZE = 125000
-CELERY_BROKER_URL = os.environ.get('REDIS_TLS')
+CELERY_BROKER_URL = "redis://127.0.0.1:6379/0"
+# CELERY_BROKER_URL = os.environ.get('RABBITMQ')
 CELERY_ACCEPT_CONTENT = ['pickle', 'application/json']
 CELERY_TASK_SERIALIZER = 'pickle'
 
-CELERY_RESULT_BACKEND = 'django-db'
+# CELERY_RESULT_BACKEND  = os.environ.get('REDIS')
+CELERY_RESULT_BACKEND = "redis://127.0.0.1:6379/1"
+# CELERY_RESULT_BACKEND = 'django-db'
 FILE_UPLOAD_HANDLERS = [
     'django.core.files.uploadhandler.MemoryFileUploadHandler',
     'django.core.files.uploadhandler.TemporaryFileUploadHandler',
