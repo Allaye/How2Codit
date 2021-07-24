@@ -12,18 +12,30 @@ from django.core.files.images import ImageFile
 import pickle
 
 
-import sys
+import sys, os, math
 def simple_upload(request):
     if request.method == 'POST' and request.FILES['image']:
         file = request.FILES['image']
-        
-        # task = process_download.delay(file)
-        task = process_download_with_progress.delay(file)
+        task = process_download_with_progress.delay(file, 10000)
         print(task.task_id)
-        return render(request, 'index.html', {'task_id': task.task_id})
+        return render(request, 'index.html', {'task_id': 'task.task_id'})
     return render(request, 'upload.html')
 
-
+# def simple_upload(request):
+#     if request.method == 'POST' and request.FILES['image']:
+#         myfile = request.FILES['image']
+#         fs = FileSystemStorage()
+#         buffer = io.BytesIO()
+#         for chunk in read_chunk(myfile.file, 125):
+#             buffer.write(chunk)
+#         buffer.seek(0)
+#         buffer = io.BytesIO(buffer.getvalue())
+#         #buffer = buffer.getvalue()
+#         image = ImageFile(buffer, 'name.jpg')
+#         fs.save(myfile.name, image)
+#         return render(request, 'index.html')
+#     return render(request, 'upload.html')
+        
 
 # Create your views here.
 def index(request):
