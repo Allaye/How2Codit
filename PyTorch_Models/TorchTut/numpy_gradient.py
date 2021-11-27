@@ -33,14 +33,15 @@ def training(lr, iters, X, Y, w):
         los = loss(Y, Y_pred)
         # calculate the gradient
         dw = gradient(X, Y, Y_pred)
-        # update the weight
+        # update the weight by moving in the negetive direction of the gradient
+        #w = w - lr * dw
         w -= lr * dw
         if epoch % 1 == 0:
             print("epoch: {}, loss: {}, w: {}".format(epoch, los, w))
-    print(f"The predicted Y before training for value X: 5 is {forward(5, w):.2f}")
+    print(f"The predicted Y After training for value X: 5 is {forward(5, w):.2f}")
 
 
 if __name__ == "__main__":
-    training(lr=0.01, iters=10, X=X, Y=Y, w=w)
+    training(lr=0.01, iters=20, X=X, Y=Y, w=w)
 
 
