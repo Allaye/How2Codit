@@ -1,3 +1,4 @@
+from numpy import dtype
 import torch
 import torch.nn as nn
 
@@ -20,9 +21,9 @@ test = torch.tensor([5], dtype=torch.float32)
 
 def forward(X):
     _, n_features = X.shape
-    input_size = n_features
-    output_size = n_features
-    return nn.Linear(input_size, output_size)
+    #input_size = n_features
+    #output_size = n_features
+    return nn.Linear(1, 1)
 
 def loss(Y, Y_predicted):
     # calculate loss MSE
@@ -45,24 +46,27 @@ def training(lr, iters, X, Y):
     print(f"The predicted Y before training for value X: 5 is {forward(test.item()):.2f}")
     for epoch in range(iters):
         # forward pass, calculate the predicted value
-        Y_pred = forward(X)
+        model = forward(X)
+        Y_pred = model(X)
         # calculate the loss
         los = loss(Y, Y_pred)
         # calculate the gradient
         gradient(los)
         # update the weight by moving in the negetive direction of the gradient
-        optimizer = optimize(Y_pred.parameters(), lr)
+        optimizer = optimize(model.parameters(), lr)
         optimizer.step()
         # with torch.no_grad():
         #     w -= lr * w.grad
         optimizer.zero_grad()
         if epoch % 10 == 0:
-            w, b = Y_pred.parameters()
+            w, b = model.parameters()
             print("epoch: {}, loss: {:.8f}, w: {}".format(epoch, los, w[0][0].item()))
-    print(f"The predicted Y After training for value X: 5 is {forward(test.item()):.2f}")
+    # print(f"The predicted Y After training for value X: 5 is {forward(test.item()):.2f}")
 
 
 if __name__ == "__main__":
+    print(type(X))
+    print(X.shape)
     training(lr=0.01, iters=100, X=X, Y=Y)
 
 
