@@ -20,7 +20,7 @@ test = torch.tensor([5], dtype=torch.float32)
 
 
 def forward(X):
-    _, n_features = X.shape
+    # _, n_features = X.shape
     #input_size = n_features
     #output_size = n_features
     return nn.Linear(1, 1)
@@ -43,7 +43,8 @@ def optimize(w, lr=0.01):
 
 
 def training(lr, iters, X, Y):
-    print(f"The predicted Y before training for value X: 5 is {forward(test.item()):.2f}")
+    m = forward(X)
+    print(f"The predicted Y before training for value X: 5 is {m(test).item():.2f}")
     for epoch in range(iters):
         # forward pass, calculate the predicted value
         model = forward(X)
@@ -61,7 +62,7 @@ def training(lr, iters, X, Y):
         if epoch % 10 == 0:
             w, b = model.parameters()
             print("epoch: {}, loss: {:.8f}, w: {}".format(epoch, los, w[0][0].item()))
-    # print(f"The predicted Y After training for value X: 5 is {forward(test.item()):.2f}")
+    print(f"The predicted Y After training for value X: 5 is {model(test).item():.2f}")
 
 
 if __name__ == "__main__":
