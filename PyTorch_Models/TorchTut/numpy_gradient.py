@@ -37,7 +37,7 @@ def training(lr, iters, X, Y, w):
         #w = w - lr * dw
         w -= lr * dw
         if epoch % 1 == 0:
-            print("epoch: {}, loss: {}, w: {}".format(epoch, los, w))
+            print("epoch: {}, loss: {:.8f}, w: {}".format(epoch, los, w))
     print(f"The predicted Y After training for value X: 5 is {forward(5, w):.2f}")
 
 
