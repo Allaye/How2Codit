@@ -40,7 +40,7 @@ def optimize(w, lr=0.01):
     # update the weight by moving in the negative direction of the gradient
 
     return torch.optim.SGD(w, lr=0.01)
-
+nn.Module
 
 def training(lr, iters, X, Y):
     m = forward(X)
