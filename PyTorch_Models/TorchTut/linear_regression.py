@@ -20,3 +20,7 @@ def model(X):
     input_size, output_size = X.shape
     return nn.Linear(input_size, output_size)
 
+def loss():
+    return nn.MSELoss()
+
+
