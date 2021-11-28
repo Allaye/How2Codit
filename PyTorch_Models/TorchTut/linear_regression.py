@@ -23,4 +23,7 @@ def model(X):
 def loss():
     return nn.MSELoss()
 
+def optimizer(model, lr):
+    return torch.optim.SGD(model.parameters(), lr=lr)
+
 
