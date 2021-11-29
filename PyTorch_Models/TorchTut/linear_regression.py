@@ -16,14 +16,39 @@ Y = Y.view(Y.shape[0], 1)
 
 n_samples, n_features = X.shape
 
-def model(X):
+def forward(X):
     input_size, output_size = X.shape
     return nn.Linear(input_size, output_size)
 
-def loss():
-    return nn.MSELoss()
+def loss(Y_pred, Y):
+    l = nn.MSELoss()
+    return l(Y_pred, Y)
 
-def optimizer(model, lr):
+
+def optimization(model, lr):
     return torch.optim.SGD(model.parameters(), lr=lr)
 
+def traning(epoch, lr, X, Y):
+    print("Training the model")
+    for epoch in range(epoch):
+        # forward pass
+        model = forward(X)
+        Y_pred = model(X)
+        # calculate loss
+        los = loss(Y_pred, Y)
+        # perform tbe backward pass, calculate the gradient
+        los.backward()
+        # update the parameters and empty the gradients
+        optimizer = optimization(model.parameters(), lr)
+        optimizer.step()
+        optimizer.zero_grad()
+        if epoch % 10 == 0:
+            w, b = model.parameters()
+            print("epoch: {}, loss: {:.8f}, w: {}".format(epoch, los, w[0][0].item()))
 
+def ploter(model):
+    
+
+
+if __name__ == "__main__":
+    pass
