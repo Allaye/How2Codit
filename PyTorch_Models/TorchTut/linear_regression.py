@@ -3,7 +3,7 @@ import torch.nn as nn
 import numpy as np
 from sklearn import datasets
 from sklearn.model_selection import train_test_split
-
+from matplotlib import pyplot as plt
 
 # create dataset from sklearn and split the data into train and test
 X, Y = datasets.make_regression(n_samples=100, n_features=1, noise=10)
@@ -16,19 +16,19 @@ Y = Y.view(Y.shape[0], 1)
 
 n_samples, n_features = X.shape
 
-def forward(X):
-    input_size, output_size = X.shape
-    return nn.Linear(input_size, output_size)
+def forward(X: torch.Tensor):
+    output_size, input_size = X.shape
+    return nn.Linear(input_size, 1)
 
 def loss(Y_pred, Y):
     l = nn.MSELoss()
     return l(Y_pred, Y)
 
 
-def optimization(model, lr):
-    return torch.optim.SGD(model.parameters(), lr=lr)
+def optimization(w, lr):
+    return torch.optim.SGD(w, lr=lr)
 
-def traning(epoch, lr, X, Y):
+def traning(epoch, lr: float, X: torch.Tensor, Y: torch.Tensor):
     print("Training the model")
     for epoch in range(epoch):
         # forward pass
@@ -45,10 +45,15 @@ def traning(epoch, lr, X, Y):
         if epoch % 10 == 0:
             w, b = model.parameters()
             print("epoch: {}, loss: {:.8f}, w: {}".format(epoch, los, w[0][0].item()))
-
-def ploter(model):
+    ploter(model, X, Y)
     
 
+def ploter(model, X, Y):
+    Y_pred = model(X).detach().numpy()
+    plt.scatter(X, Y, label="Original data")
+    plt.scatter(X, Y_pred, label="Predicted data")
+    plt.show()
 
 if __name__ == "__main__":
-    pass
+    traning(epoch=100, lr=0.01, X=X, Y=Y)
+    
