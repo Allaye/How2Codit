@@ -2,8 +2,20 @@ import torch
 import torch.nn as nn
 import numpy as np
 from sklearn import datasets
-from sklearn.model_selection import train_test_split
 from matplotlib import pyplot as plt
+
+
+# pytorch pipline
+# Design model, design input, output layer
+# Construct loss function and optimizer
+# Train the model
+   # 3.1 forward pass (forward propagation): compute the model prediction
+   # 3.2 backward pass (backward propagation): compute the gradient of the loss function with respect to the model parameters
+   # 3.3 update the model parameters
+# create the dataset and prediction visualization function
+# provide the model with the input and compute the prediction
+
+
 
 # create dataset from sklearn and split the data into train and test
 X, Y = datasets.make_regression(n_samples=100, n_features=1, noise=10)
