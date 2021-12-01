@@ -70,9 +70,9 @@ class LogisticRegression(nn.Module):
          # print out the training progress and details
          if epoch % 10 == 0:
             w, b = self.parameters()
-            print(f'epoch {epoch+1}/{epochs} loss: {loss.item()} w: {w.item()} b: {b.item()}')
+            print(f'epoch {epoch+1}/{epochs} loss: {loss.item()} weight: {w[0][9].item()}')
             # print(f'epoch: {epoch+1}, loss: {loss.item():.4f}')
-            self.evaluate(x, y)
+      self.evaluate(x, y)
       return -1
    
    def evaluate(self, x, y):
@@ -84,7 +84,7 @@ class LogisticRegression(nn.Module):
          y_pred = (y_pred > 0.5).float()
          accuracy = (y_pred == y).float().mean()
          print(f'accuracy: {accuracy.item():.4f}')
-         return accuracy
+         return None
 
 
 
@@ -92,4 +92,3 @@ if __name__ == '__main__':
    x_train, x_test, y_train, y_test = prepare_data()
    model = LogisticRegression(x_train.shape[1])
    model.fit(x_train, y_train)
-   model.evaluate(x_test, y_test)
