@@ -59,10 +59,9 @@ def dummy_training_loop(num_epochs, customedatasetloader, batch_size=4):
         for i, (features, labels) in enumerate(customedatasetloader.loader()):
             # perform forward and backward pass
             # do something with the data
-            if i + 1 % 5 == 0:
-                print(f'epoch: {epoch+1}/{num_epochs}, step: {i+1}/{n_iter}, input: {input.shape}')
-                # print('Epoch [{}/{}], Step [{}/{}]'.format(epoch + 1, num_epochs, i + 1, n_iter))
-
+            if (i + 1) % 5 == 0:
+                print(f'epoch: {epoch+1}/{num_epochs}, step: {i+1}/{n_iter}, input: {features.shape}')
 
 if __name__ == '__main__':
+    data = CustomDatasetLoader(data_path='./wine.csv', skiprows=1)
     dummy_training_loop(num_epochs=10, customedatasetloader=data, batch_size=4)
