@@ -43,18 +43,26 @@ class CustomDatasetLoader(Dataset):
 
     def loader(self, batch_size=5, shuffle=True, num_workers=0):
         """
-        create a customizable data loader
+        create a customizable data loader, with the able of been iterable and reshuffle
         """
         return DataLoader(dataset=self, batch_size=batch_size, shuffle=shuffle, num_workers=num_workers)
 
 
 
-data = CustomDatasetLoader(data_path='./wine.csv', skiprows=1)
-first_data = data[0]
-features, labels = first_data
-print(features, labels, ';;;;;')
+def dummy_training_loop(num_epochs, customedatasetloader, batch_size=4):
+    """
+    A dummy training loop to show how to use the data loader
+    """
+    n_samples = len(customedatasetloader.dataset)
+    n_iter = math.ceil(n_samples / batch_size)
+    for epoch in range(num_epochs):
+        for i, (features, labels) in enumerate(customedatasetloader.loader()):
+            # perform forward and backward pass
+            # do something with the data
+            if i + 1 % 5 == 0:
+                print(f'epoch: {epoch+1}/{num_epochs}, step: {i+1}/{n_iter}, input: {input.shape}')
+                # print('Epoch [{}/{}], Step [{}/{}]'.format(epoch + 1, num_epochs, i + 1, n_iter))
 
-dataloader = data.loader()
-next_batch = next(iter(dataloader))
-print(next_batch)
 
+if __name__ == '__main__':
+    dummy_training_loop(num_epochs=10, customedatasetloader=data, batch_size=4)
