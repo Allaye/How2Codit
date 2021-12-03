@@ -116,3 +116,20 @@ def train_model(model, train_loader, loss_fn, optimizer, epochs, device):
                       .format(epoch+1, epochs, i+1, n_total_steps, loss.item()))
 
 
+
+
+
+if __name__ == "__main__":
+    # configure the device
+    device = configure_device()
+    # define hyper parameters
+    learning_rate, input_size, hidden_size, num_classes, epochs, batch_size = hyper_parameters()
+    # prepare dataset
+    train_loader, test_loader = prepare_dataset(batch_size)
+    # define feed forward network
+    model = FeedForward(input_size, hidden_size, num_classes)
+    # define loss and optimizer
+    loss_fn, optimizer = model.loss_optimizer(lr=learning_rate)
+    # train the model
+    train_model(model, train_loader, loss_fn, optimizer, epochs, device)
+    # evaluate the model
