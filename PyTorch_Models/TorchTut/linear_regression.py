@@ -58,7 +58,7 @@ def traning(epoch, lr: float, X: torch.Tensor, Y: torch.Tensor):
             w, b = model.parameters()
             print("epoch: {}, loss: {:.8f}, w: {}".format(epoch, los, w[0][0].item()))
     ploter(model, X, Y)
-    
+
 
 def ploter(model, X, Y):
     Y_pred = model(X).detach().numpy()
@@ -68,4 +68,3 @@ def ploter(model, X, Y):
 
 if __name__ == "__main__":
     traning(epoch=100, lr=0.01, X=X, Y=Y)
-    
