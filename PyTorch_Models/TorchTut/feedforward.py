@@ -89,7 +89,7 @@ class FeedForward(nn.Module):
         return loss_fn, optimizer
 
 
-def train_model(model, train_loader, loss_fn, optimizer, epochs, device):
+def train_model(model, train_loader, test_loader, loss_fn, optimizer, epochs, device):
     '''
     perform training on the model, update hyper parameters
     '''
@@ -99,8 +99,8 @@ def train_model(model, train_loader, loss_fn, optimizer, epochs, device):
             # prepare the images by flattening them
             images = images.reshape(-1, 28*28)
             # move tensors to the configured device
-            images = images.to(device)
-            labels = labels.to(device)
+            # images = images.to(device)
+            # labels = labels.to(device)
             # forward pass
             outputs = model(images)
             # calculate loss
@@ -114,5 +114,38 @@ def train_model(model, train_loader, loss_fn, optimizer, epochs, device):
             if (i+1) % 100 == 0:
                 print('Epoch [{}/{}], Step [{}/{}], Loss: {:.4f}'
                       .format(epoch+1, epochs, i+1, n_total_steps, loss.item()))
+    eval_model(model, test_loader, device)
 
+def eval_model(model, test_loader, device):
+    '''
+    evaluate the model
+    '''
+    # loop over test data
+    with torch.no_grad():
+        total_correct = 0
+        total_sample = 0
+        for images, labels in test_loader:
+            # move tensors to the configured device
+            images = images.reshape(-1, 28*28)
+            outputs = model(images)
+            
+            # calculate accuracy
+            _, predicted = torch.max(outputs, 1)
+            total_sample += labels.size(0)
+            total_correct += (predicted == labels).sum().item()
+        accuracy = 100.0 * total_correct / total_sample
+        print('Accuracy of the network on the 10000 test images: {} %'.format(accuracy))
 
+if __name__ == "__main__":
+    # configure the device
+    device = configure_device()
+    # define hyper parameters
+    learning_rate, input_size, hidden_size, num_classes, epochs, batch_size = hyper_parameters()
+    # prepare dataset
+    train_loader, test_loader = prepare_dataset(batch_size)
+    # define feed forward network
+    model = FeedForward(input_size, hidden_size, num_classes)
+    # define loss and optimizer
+    loss_fn, optimizer = model.loss_optimizer(lr=learning_rate)
+    # train and evealuate the model
+    train_model(model, train_loader, test_loader, loss_fn, optimizer, epochs, device)
