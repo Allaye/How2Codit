@@ -78,7 +78,7 @@ class FeedForward(nn.Module):
         out = self.f2(out)
         return out
 
-    def loss_optimizer(self, lr):
+    def loss_optimizer(self, lr=0.001):
         '''
         define loss and optimizer
         '''
@@ -88,4 +88,27 @@ class FeedForward(nn.Module):
         optimizer = torch.optim.Adam(self.parameters(), lr=lr)
         return loss_fn, optimizer
 
+
+def train_model(model, train_loader, loss_fn, optimizer, epochs, device):
+    '''
+    perform training on the model, update hyper parameters
+    '''
+    n_total_steps = len(train_loader)
+    for epoch in range(epochs):
+        for i, (images, labels) in enumerate(train_loader):
+            # prepare the images by flattening them
+            images = images.reshape(-1, 28*28)
+            # move tensors to the configured device
+            images = images.to(device)
+            labels = labels.to(device)
+            # forward pass
+            outputs = model(images)
+            # calculate loss
+            loss = loss_fn(outputs, labels)
+            # backward pass
+            optimizer.zero_grad()
+            loss.backward()
+            optimizer.step()
+
+           
 
