@@ -68,4 +68,4 @@ def ploter(model, X, Y):
 
 if __name__ == "__main__":
     traning(epoch=100, lr=0.01, X=X, Y=Y)
-    
+    print("nothign")
