@@ -56,3 +56,24 @@ def prepare_dataset(batch_size):
                'deer', 'dog', 'frog', 'horse', 'ship', 'truck')
 
     return train_loader, test_loader, classes
+
+
+# define the model
+class CNN(nn.Module):
+    def __init__(self):
+        super().__init__()
+        
+
+    def forward(self, x):
+
+        return x
+
+    def loss_optimizer(self, lr=0.001):
+        '''
+        define loss and optimizer
+        '''
+        # define loss function
+        loss_fn = nn.CrossEntropyLoss()
+        # define optimizer
+        optimizer = torch.optim.Adam(self.parameters(), lr=lr)
+        return loss_fn, optimizer
