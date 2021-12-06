@@ -135,7 +135,7 @@ def eval_model(model, test_loader, device, batch_size):
             # move tensors to the configured device
             images = images.to(device)
             labels = labels.to(device)
-            images = images.reshape(-1, 28*28)
+            # images = images.reshape(-1, 28*28)
             outputs = model(images)
             
             # calculate accuracy
