@@ -36,3 +36,23 @@ def hyper_parameters():
     batch_size = 100
     return learning_rate, input_size, hidden_size, num_classes, epochs, batch_size
 
+# papare dataset
+def prepare_dataset(batch_size):
+    '''
+    get the mnist dataset, transform it to tensor and normalize it
+    '''
+    # MNIST dataset
+    train_dataset = torchvision.datasets.CIFAR10(root='./',train=True,
+                                               transform=transforms.ToTensor(),
+                                               download=True)
+    test_dataset = torchvision.datasets.CIFAR10(root='./', train=False, transform=transforms.ToTensor())
+
+    # Data loader
+    train_loader = torch.utils.data.DataLoader(dataset=train_dataset, batch_size=batch_size, shuffle=True)
+
+    test_loader = torch.utils.data.DataLoader(dataset=test_dataset, batch_size=batch_size, shuffle=False)
+
+    classes = ('plane', 'car', 'bird', 'cat',
+               'deer', 'dog', 'frog', 'horse', 'ship', 'truck')
+
+    return train_loader, test_loader, classes
