@@ -96,8 +96,8 @@ def train_model(model, train_loader, test_loader, loss_fn, optimizer, epochs, de
             # calculate loss
             loss = loss_fn(outputs, labels)
             # backward pass
-            optimizer.zero_grad()
-            loss.backward()
+            # optimizer.zero_grad()
+            # loss.backward()
             optimizer.step()
 
             # print training statistics and information
