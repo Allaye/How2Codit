@@ -22,3 +22,17 @@ def configure_device():
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
     print("Device:", device)
     return device
+
+# define hyper parameters
+def hyper_parameters():
+    '''
+    define hyper parameters used in the model
+    '''
+    learning_rate = 0.001
+    input_size = 784
+    hidden_size = 500
+    num_classes = 10
+    epochs = 10
+    batch_size = 100
+    return learning_rate, input_size, hidden_size, num_classes, epochs, batch_size
+
