@@ -74,7 +74,9 @@ class CNN(nn.Module):
         x = self.pool(F.relu(self.conv1(x)))
         x = self.pool(F.relu(self.conv2(x)))
         x = x.view(-1, 16 * 5 * 5)
-        
+        x = F.relu(self.fc1(x))
+        x = F.relu(self.fc2(x))
+        x = self.fc3(x)
         return x
 
     def loss_optimizer(self, lr=0.001):
@@ -88,7 +90,7 @@ class CNN(nn.Module):
         return loss_fn, optimizer
 
 
-def train_model(model, train_loader, test_loader, loss_fn, optimizer, epochs, device):
+def train_model(model, train_loader, test_loader, loss_fn, optimizer, epochs, device, batch_size):
     '''
     perform training on the model, update hyper parameters
     '''
@@ -116,10 +118,10 @@ def train_model(model, train_loader, test_loader, loss_fn, optimizer, epochs, de
             if (i+1) % 100 == 0:
                 print('Epoch [{}/{}], Step [{}/{}], Loss: {:.4f}'
                       .format(epoch+1, epochs, i+1, n_total_steps, loss.item()))
-    eval_model(model, test_loader, device)
+    eval_model(model, test_loader, device, batch_size)
 
 
-def eval_model(model, test_loader, device):
+def eval_model(model, test_loader, device, batch_size):
     '''
     evaluate the model
     '''
@@ -149,6 +151,21 @@ def eval_model(model, test_loader, device):
         accuracy = 100.0 * total_correct / total_sample
         print('Accuracy of the network on the 10000 test images: {} %'.format(accuracy))
 
-        for i of range(10):
+        for i in range(10):
             accuracy = 100.0 * n_class_correct[i] / n_class_sample[i]
             print('Accuracy of {} class: {} %'.format(i, accuracy))
+
+
+if __name__ == '__main__':
+    # load hyper parameters
+    learning_rate, input_size, hidden_size, num_classes, epochs, batch_size = hyper_parameters()
+    # load dataset
+    train_loader, test_loader, classes = prepare_dataset(batch_size)
+    # configure device
+    device = configure_device()
+    # define model
+    model = CNN().to(device)
+    # define loss and optimizer
+    loss_fn, optimizer = model.loss_optimizer(lr=learning_rate)
+    # train model
+    train_model(model, train_loader, test_loader, loss_fn, optimizer, epochs, device, batch_size)
