@@ -87,15 +87,18 @@ def train_model(model, train_loader, test_loader, loss_fn, optimizer, epochs, de
     for epoch in range(epochs):
         for i, (images, labels) in enumerate(train_loader):
             # prepare the images by flattening them
-            images = images.reshape(-1, 28*28)
+            # images = images.reshape(-1, 28*28)
             # move tensors to the configured device
-            # images = images.to(device)
-            # labels = labels.to(device)
+            images = images.to(device)
+            labels = labels.to(device)
+
             # forward pass
             outputs = model(images)
+
             # calculate loss
             loss = loss_fn(outputs, labels)
-            # backward pass
+            
+            # backward pass and optimization
             optimizer.zero_grad()
             loss.backward()
             optimizer.step()
