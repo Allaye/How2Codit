@@ -131,4 +131,15 @@ def eval_model(model, test_loader, device):
             _, predicted = torch.max(outputs, 1)
             total_sample += labels.size(0)
             total_correct += (predicted == labels).sum().item()
-            
+            for i in range(batch_size):
+                label = labels[i]
+                pred = predicted[i]
+                if label == pred:
+                    n_class_correct[label] += 1
+                n_class_sample[label] += 1
+        accuracy = 100.0 * total_correct / total_sample
+        print('Accuracy of the network on the 10000 test images: {} %'.format(accuracy))
+
+        for i of range(10):
+            accuracy = 100.0 * n_class_correct[i] / n_class_sample[i]
+            print('Accuracy of {} class: {} %'.format(i, accuracy))
