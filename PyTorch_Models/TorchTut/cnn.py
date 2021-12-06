@@ -118,8 +118,12 @@ def eval_model(model, test_loader, device):
     with torch.no_grad():
         total_correct = 0
         total_sample = 0
+        n_class_correct = [0 for i in range(10)]
+        n_class_sample = [0 for i in range(10)]
         for images, labels in test_loader:
             # move tensors to the configured device
+            images = images.to(device)
+            labels = labels.to(device)
             images = images.reshape(-1, 28*28)
             outputs = model(images)
             
@@ -127,5 +131,4 @@ def eval_model(model, test_loader, device):
             _, predicted = torch.max(outputs, 1)
             total_sample += labels.size(0)
             total_correct += (predicted == labels).sum().item()
-        accuracy = 100.0 * total_correct / total_sample
-        print('Accuracy of the network on the 10000 test images: {} %'.format(accuracy))
+            
