@@ -62,10 +62,21 @@ def prepare_dataset(batch_size):
 class CNN(nn.Module):
     def __init__(self):
         super().__init__()
+        self.conv1 = nn.Conv2d(3, 6, 5)
+        self.pool = nn.MaxPool2d(2, 2)
+        self.conv2 = nn.Conv2d(6, 16, 5)
+        self.fc1 = nn.Linear(16 * 5 * 5, 120)
+        self.fc2 = nn.Linear(120, 84)
+        self.fc3 = nn.Linear(84, 10)
         
 
     def forward(self, x):
-
+        x = self.pool(F.relu(self.conv1(x)))
+        x = self.pool(F.relu(self.conv2(x)))
+        x = x.view(-1, 16 * 5 * 5)
+        x = F.relu(self.fc1(x))
+        x = F.relu(self.fc2(x))
+        x = self.fc3(x)
         return x
 
     def loss_optimizer(self, lr=0.001):
@@ -79,7 +90,7 @@ class CNN(nn.Module):
         return loss_fn, optimizer
 
 
-def train_model(model, train_loader, test_loader, loss_fn, optimizer, epochs, device):
+def train_model(model, train_loader, test_loader, loss_fn, optimizer, epochs, device, batch_size):
     '''
     perform training on the model, update hyper parameters
     '''
@@ -107,10 +118,10 @@ def train_model(model, train_loader, test_loader, loss_fn, optimizer, epochs, de
             if (i+1) % 100 == 0:
                 print('Epoch [{}/{}], Step [{}/{}], Loss: {:.4f}'
                       .format(epoch+1, epochs, i+1, n_total_steps, loss.item()))
-    eval_model(model, test_loader, device)
+    eval_model(model, test_loader, device, batch_size)
 
 
-def eval_model(model, test_loader, device):
+def eval_model(model, test_loader, device, batch_size):
     '''
     evaluate the model
     '''
@@ -118,8 +129,12 @@ def eval_model(model, test_loader, device):
     with torch.no_grad():
         total_correct = 0
         total_sample = 0
+        n_class_correct = [0 for i in range(10)]
+        n_class_sample = [0 for i in range(10)]
         for images, labels in test_loader:
             # move tensors to the configured device
+            images = images.to(device)
+            labels = labels.to(device)
             images = images.reshape(-1, 28*28)
             outputs = model(images)
             
@@ -127,5 +142,30 @@ def eval_model(model, test_loader, device):
             _, predicted = torch.max(outputs, 1)
             total_sample += labels.size(0)
             total_correct += (predicted == labels).sum().item()
+            for i in range(batch_size):
+                label = labels[i]
+                pred = predicted[i]
+                if label == pred:
+                    n_class_correct[label] += 1
+                n_class_sample[label] += 1
         accuracy = 100.0 * total_correct / total_sample
         print('Accuracy of the network on the 10000 test images: {} %'.format(accuracy))
+
+        for i in range(10):
+            accuracy = 100.0 * n_class_correct[i] / n_class_sample[i]
+            print('Accuracy of {} class: {} %'.format(i, accuracy))
+
+
+if __name__ == '__main__':
+    # load hyper parameters
+    learning_rate, input_size, hidden_size, num_classes, epochs, batch_size = hyper_parameters()
+    # load dataset
+    train_loader, test_loader, classes = prepare_dataset(batch_size)
+    # configure device
+    device = configure_device()
+    # define model
+    model = CNN().to(device)
+    # define loss and optimizer
+    loss_fn, optimizer = model.loss_optimizer(lr=learning_rate)
+    # train model
+    train_model(model, train_loader, test_loader, loss_fn, optimizer, epochs, device, batch_size)
